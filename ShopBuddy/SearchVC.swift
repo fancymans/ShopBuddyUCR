@@ -30,6 +30,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     @IBOutlet var resultsTable: UITableView!
     
     @IBAction func getCurrentLocation(sender: UIButton) {
+        
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
@@ -140,12 +141,12 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                     let pm = placemarks[0] as CLPlacemark
                     self.displayLocationInfo(pm, manager: manager)
                 }
-                else{
+                else {
                     println("Error with data recv from geocoder")
                 }
             })
         }
-        /*
+        
         else {
             // This function looks at the address put in the search bar and returns the latti and longi of said location
             CLGeocoder().geocodeAddressString(locationSearchBar.text, {(placemarks: [AnyObject]!, error: NSError!) -> Void in
@@ -156,7 +157,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                 }   // end of if
             })      // end of function call
         }
-        */
+        
     }
     // ____________________________________________________________
     

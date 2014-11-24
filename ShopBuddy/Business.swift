@@ -19,15 +19,6 @@ class Business {
     var listOfProducts: [Product]
     var dbURL: NSURL = NSURL(string: "http://shopbuddyucr.com/GetItems.php")!
     
-    /* THESE ARE NOW A PART OF PRODUCTS
-    var price87: String
-    var price89: String
-    var price91: String
-    var priceD: String
-    var timeLastUpdated: String
-    var userLastUpdated: String
-    */
-    
     var distance: String
     
     init () {
