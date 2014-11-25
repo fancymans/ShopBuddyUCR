@@ -190,6 +190,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         var post: NSString = NSString(format: "lati=" + lati + "&long=" + long)                     // Post is what we send as input to server
         var url: NSURL = NSURL(string:"http://shopbuddyucr.com/GetBusiness.php")!                   // URL of the PHP
         var postData: NSData = post.dataUsingEncoding(NSASCIIStringEncoding)!
+        println("post: " + post)
         var postLength: NSString = String( postData.length )
         var request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
