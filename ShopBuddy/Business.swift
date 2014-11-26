@@ -16,8 +16,7 @@ class Business {
     var name: String
     var phoneNum: String
     var address: String
-    var listOfProducts: [Product]
-    var dbURL: NSURL = NSURL(string: "http://shopbuddyucr.com/GetItems.php")!
+    var dbURL: NSURL = NSURL(string: "http://shopbuddyucr.com/GetBusinessbackup.php")!
     
     var distance: String
     

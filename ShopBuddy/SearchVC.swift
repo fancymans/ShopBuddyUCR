@@ -6,20 +6,17 @@
 //  Copyright (c) 2014 Kenneth Hsu. All rights reserved.
 //
 
-
 import UIKit
 import CoreLocation
 
 class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate {
     
     // Optional variables
-    var productSearchBarText = "default"
-    var locationSearchBarText = "default"
-    var gettingCurrentLocation = false
-
+    var productSearchBarText: String = "default"
+    var locationSearchBarText: String = "default"
     var data: NSMutableData = NSMutableData()
     var currentProduct: Product = Product()
-    var currentIndex = Int()
+    var currentIndex: Int = Int()
     var listOfBusinesses: [Business] = [Business]()
     var totalListOfProducts: [Product] = [Product]()
     var sortBy = "Price"
@@ -27,7 +24,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     var ccFilter = "0"
     var tfsFilter = "0"
     // Location manager
-    var locationManager = CLLocationManager()
+    let locationManager = CLLocationManager()
     
     // IBOutlets & Actions
     @IBOutlet var productSearchBar: UISearchBar!
@@ -35,22 +32,10 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     @IBOutlet var resultsTable: UITableView!
     
     @IBAction func getCurrentLocation(sender: UIButton) {
-
-        gettingCurrentLocation = true
-        locationSearchBar.text = "getting current location..."
-        getCurrentLocation()
-
-    }
-    
-    @IBAction func searchTriggered(sender: AnyObject) {
-        
-        if (locationSearchBarText != locationSearchBar.text) {
-            println("getting user requested location")
-            gettingCurrentLocation = false
-            getCurrentLocation()
-        }
-        
-        resultsTable.reloadData()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
     }
     
     // Update function
@@ -69,15 +54,21 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
 
         self.resultsTable.delegate = self
         self.resultsTable.dataSource = self
-
+        resultsTable.reloadData()
+        println("done updating view did load")
     }
     
+    // Memory warning detector
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     
+    //
+    // MARK: - Table View functions
+    // ____________________________________________________________
+    // Function that sets up each cell inside the tableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: ResultCell = tableView.dequeueReusableCellWithIdentifier("searchResultCell") as ResultCell
         let currentProduct = totalListOfProducts[indexPath.row]
@@ -94,16 +85,29 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         cell.setCell(tmp_pName, bName: tmp_bName, price: tmp_price, time: tmp_time, user: tmp_user, distance: tmp_distance)
         return cell
     }
-
+    // ____________________________________________________________
+    
+    // Function that returns the number of rows in the table
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return totalListOfProducts.count
     }
-
+    // ____________________________________________________________
+    
+    // Function that is automatically called when a cell is tapped or selected.
+    // This is NOT called if the cell is set to segue to another view
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         println("You selected custom cell #: " + String(format: "%i", indexPath.row))
         currentProduct = totalListOfProducts[indexPath.row]
     }
+    // ____________________________________________________________
+    // END: - Table View functions
+    // =======================================================================================================
 
+
+    
+    //
+    // MARK: - Location functions
+    // ____________________________________________________________
     // Function that gets the current location of the user
     func getCurrentLocation() {
         println("I am updating location")
@@ -112,64 +116,61 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
     }
-
+    // ____________________________________________________________
+    
+    // Function that updates the location when the search bar text is edited
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        // self.getCurrentLocation()
         searchBar.showsCancelButton = false
     }
+    // ____________________________________________________________
     
+    // Location Manager
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
 
-        if gettingCurrentLocation {
-            println("IF TRUE LOOP============")
-            // This function gets the user's current location.
-            CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error)->Void in
-                if error != nil {
-                    println("Reverse geocoder failed with error")
-                    println("Error: " + error.localizedDescription)
-                    return
-                }
-                
-                if placemarks.count > 0 {
-                    let pm = placemarks[0] as CLPlacemark
-                    self.displayLocationInfo(pm, manager: manager)
-                }
-                else {
-                    println("Error with data recv from geocoder")
-                }
-            })
-        }
+        // This function gets the user's current location.
+        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error)->Void in
+            if error != nil {
+                println("Reverse geocoder failed with error")
+                println("Error: " + error.localizedDescription)
+                return
+            }
+            
+            if placemarks.count > 0 {
+                // Stop updating location after location has been obtained (less battery strain)
+                // self.locationManager.stopUpdatingLocation()
+                manager.stopUpdatingLocation()
+                let pm = placemarks[0] as CLPlacemark
+                self.displayLocationInfo(pm, manager: manager)
+            }
+            else{
+                println("Error with data recv from geocoder")
+            }
+        })
         
+        /*
         else {
-            println("ELSE TRUE LOOP============")
+            // This function looks at the address put in the search bar and returns the latti and longi of said location
             CLGeocoder().geocodeAddressString(locationSearchBar.text, {(placemarks: [AnyObject]!, error: NSError!) -> Void in
-//                if let placemark = placemarks?[0] as? CLPlacemark {
-//                    let location = CLLocationCoordinate2D( latitude: placemark.location.coordinate.latitude, longitude: placemark.location.coordinate.longitude )
-//                    println(location.longitude);
-//                    println(location.latitude);
-//                }   // end of if
-                if error != nil {
-                    println("Reverse geocoder failed with error")
-                    println("Error: " + error.localizedDescription)
-                    return
-                }
-                
-                if placemarks.count > 0 {
-                    let pm = placemarks[0] as CLPlacemark
-                    self.displayLocationInfo(pm, manager: manager)
-                }
-                else {
-                    println("Error with data recv from geocoder")
-                }
+                if let placemark = placemarks?[0] as? CLPlacemark {
+                    let location = CLLocationCoordinate2D( latitude: placemark.location.coordinate.latitude, longitude: placemark.location.coordinate.longitude )
+                    println(location.longitude);
+                    println(location.latitude);
+                }   // end of if
             })      // end of function call
         }
-        
+        */
     }
-
+    // ____________________________________________________________
+    
+    // Check for error while getting location
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println("Error while trying to obtain location")
         println("Error " + error.localizedDescription)
     }
-
+    // ____________________________________________________________
+    
+    // Function to show location info of a placemark
     func displayLocationInfo(placemark: CLPlacemark, manager: CLLocationManager) {
         // stop updating the location
         manager.stopUpdatingLocation()
@@ -186,7 +187,8 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         queryLocationFromPHP(manager)
         self.viewDidLoad()
     }
-
+    // ____________________________________________________________
+    
     func queryLocationFromPHP(manager: CLLocationManager) {
         // Formatting lati and long into NSStrings to send
         var lati: NSString = NSString(format: "%.10f", manager.location.coordinate.latitude)
@@ -204,7 +206,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         // Post is what we send as input to server
         var url: NSURL = NSURL(string:"http://shopbuddyucr.com/GetProducts.php")!                   // URL of the PHP
         var postData: NSData = post.dataUsingEncoding(NSASCIIStringEncoding)!
-        println("post: " + post)
         var postLength: NSString = String( postData.length )
         var request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
@@ -217,7 +218,13 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         var urlData: NSData? = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&reponseError)
         
         if (urlData != nil) {
-
+            
+            /*  Comment this line to print responseData to console
+            //----------------------------------------------
+                var responseData:NSString = NSString(data:urlData!, encoding:NSUTF8StringEncoding)!
+                NSLog("Response ==> %@", responseData);
+            // */
+            
             var error:NSError?
             
             var responseData: NSArray = NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSArray
@@ -305,13 +312,12 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             return "sampleBusinessPhoto.png"
         }
     }
+    // =======================================================================================================
+    
+    
+    // MARK: - Navigation
 
-    func storeAllProducts(productsFromBusiness: [Product]) {
-        for var i = 0; i < productsFromBusiness.count; i++ {
-            totalListOfProducts.append(productsFromBusiness[i])
-        }
-    }
-
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.

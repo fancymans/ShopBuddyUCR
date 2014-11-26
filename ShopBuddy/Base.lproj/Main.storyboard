@@ -177,7 +177,12 @@
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="Search" id="1pc-A0-dgE">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="YLE-D3-6Je">
+                                        <barButtonItem key="leftBarButtonItem" title="Filter" id="ykU-V4-Txi">
+                                            <connections>
+                                                <segue destination="igI-66-Hkf" kind="show" identifier="goto_Filter" id="06t-pD-mmQ"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" style="plain" id="YLE-D3-6Je">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Z4g-pX-wIC">
                                                 <rect key="frame" x="329" y="118" width="22" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -190,11 +195,6 @@
                                                     <action selector="getCurrentLocation:" destination="SAK-FR-X6z" eventType="touchUpInside" id="6Eh-KG-IIh"/>
                                                 </connections>
                                             </button>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Search" id="9nC-tE-81t">
-                                            <connections>
-                                                <action selector="searchTriggered:" destination="SAK-FR-X6z" id="aHa-6N-Y0F"/>
-                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
