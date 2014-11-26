@@ -860,6 +860,135 @@
             </objects>
             <point key="canvasLocation" x="-60.5" y="200.5"/>
         </scene>
+        <!--Filter-->
+        <scene sceneID="OQ6-cu-gaD">
+            <objects>
+                <viewController id="igI-66-Hkf" customClass="Filter" customModule="ShopBuddy" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3Rz-bt-rlW"/>
+                        <viewControllerLayoutGuide type="bottom" id="qCO-CM-edk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nTU-Bi-PLZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iUq-W6-uqo">
+                                <rect key="frame" x="0.0" y="19" width="375" height="648"/>
+                                <subviews>
+                                    <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EEZ-AS-6rx">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <items>
+                                            <navigationItem title="Filter" id="Zzj-Dj-wpP">
+                                                <barButtonItem key="leftBarButtonItem" title="Back" id="67e-Z9-6fi">
+                                                    <connections>
+                                                        <action selector="backButtonTrigger:" destination="igI-66-Hkf" id="Pkx-ez-mNc"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dRz-EX-FZQ">
+                                        <rect key="frame" x="8" y="75" width="72" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Brand" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CaE-wu-soS">
+                                        <rect key="frame" x="9" y="150" width="47" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Credit Card" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgL-nc-rNf">
+                                        <rect key="frame" x="45" y="350" width="89" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="24/7" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YK2-1g-fSs">
+                                        <rect key="frame" x="45" y="389" width="35" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Car Wash" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AGh-gg-2iB">
+                                        <rect key="frame" x="45" y="428" width="75" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sort By" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NOs-cS-lAj">
+                                        <rect key="frame" x="45" y="510" width="58" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="4" translatesAutoresizingMaskIntoConstraints="NO" id="ccS-co-GxH" userLabel="GradeSegment">
+                                        <rect key="frame" x="8" y="104" width="359" height="29"/>
+                                        <segments>
+                                            <segment title="5 miles"/>
+                                            <segment title="10 miles"/>
+                                            <segment title="20 miles"/>
+                                            <segment title="60 miles"/>
+                                            <segment title="No Filter"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="GradeSelected:" destination="igI-66-Hkf" eventType="valueChanged" id="J7C-R2-9XB"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <pickerView contentMode="bottom" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSb-MV-WJm">
+                                        <rect key="frame" x="17" y="171" width="341" height="162"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="igI-66-Hkf" id="see-Dj-XR3"/>
+                                        </connections>
+                                    </pickerView>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dRc-I8-72s" userLabel="CC">
+                                        <rect key="frame" x="309" y="345" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="ccSelected:" destination="igI-66-Hkf" eventType="valueChanged" id="a3J-0r-M6N"/>
+                                        </connections>
+                                    </switch>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lfO-uZ-qNm" userLabel="247">
+                                        <rect key="frame" x="309" y="384" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="tfsSelected:" destination="igI-66-Hkf" eventType="valueChanged" id="iFL-n1-fMN"/>
+                                        </connections>
+                                    </switch>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bAi-Nv-PLW" userLabel="CarWash">
+                                        <rect key="frame" x="309" y="423" width="51" height="31"/>
+                                        <color key="onTintColor" red="0.1739797397" green="0.8324850063" blue="0.16178625360000001" alpha="0.0" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="carwashSelected:" destination="igI-66-Hkf" eventType="valueChanged" id="4zV-eK-5jc"/>
+                                        </connections>
+                                    </switch>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wxf-KQ-qCU" userLabel="Sort">
+                                        <rect key="frame" x="45" y="544" width="285" height="29"/>
+                                        <segments>
+                                            <segment title="Price"/>
+                                            <segment title="Distance"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="sortSelected:" destination="igI-66-Hkf" eventType="valueChanged" id="VNZ-Ip-tyZ"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="DistanceSC" destination="ccS-co-GxH" id="BID-XS-KYd"/>
+                        <outlet property="SortSC" destination="wxf-KQ-qCU" id="I53-wp-tEM"/>
+                        <outlet property="carwashSwitch" destination="bAi-Nv-PLW" id="6Yu-dO-avP"/>
+                        <outlet property="ccSwitch" destination="dRc-I8-72s" id="kWE-vU-Cae"/>
+                        <outlet property="tfsSwitch" destination="lfO-uZ-qNm" id="VB4-fs-Ith"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DUs-Ew-csi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2813.5" y="1448.5"/>
+        </scene>
     </scenes>
     <resources>
         <image name="locationIcon" width="256" height="256"/>

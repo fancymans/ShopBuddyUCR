@@ -9,64 +9,83 @@
 import Foundation
 
 class Product {
-    
-    var productID: String
+    // Business vars
     var businessID: String
+    var businessName: String
     var category: String
+    
+    // Product vars
     var productName: String
     var productPrice: String
     var timeLastUpdated: String
     var userLastUpdated: String
+    var distance: String
+    var ccFlag: Bool
+    var open24Flag: Bool
     var isProduct: Bool
     
     init () {
-        self.productID = "-1"
-        self.businessID = "-1"
-        self.category = "Default Catagory Name"
-        self.productName = "Default Product Name"
-        self.productPrice = "0.00"
-        self.timeLastUpdated = "0 minutes ago"
-        self.userLastUpdated = "DefaultUser"
-        self.isProduct = false
+        self.businessID         = "-1"
+        self.businessName       = "Default Business Name"
+        self.category           = "Default Catagory Name"
+        self.productName        = "Default Product Name"
+        self.productPrice       = "0.00"
+        self.timeLastUpdated    = "0 minutes ago"
+        self.userLastUpdated    = "DefaultUser"
+        self.distance           = "0"
+        self.ccFlag             = false
+        self.open24Flag         = false
+        self.isProduct          = false
     }
     
     init (category: String, productName: String) {
-        self.productID = "n/a"
-        self.businessID = "n/a"
-        self.category = category
-        self.productName = productName
-            if (self.productName == "") {
-                isProduct = false
-            }
-            else {
-                isProduct = true
-            }
-        self.productPrice = "n/a"
-        self.timeLastUpdated = "n/a"
-        self.userLastUpdated = "System"
+        self.businessID         = "n/a"
+        self.businessName       = "Default Business Name"
+        self.category           = category
+        self.productName        = productName
+        self.productPrice       = "n/a"
+        self.timeLastUpdated    = "n/a"
+        self.userLastUpdated    = "System"
+        self.distance           = "0"
+        self.ccFlag             = false
+        self.open24Flag         = false
+        
+        if (self.productName == "") {
+            isProduct = false
+        }
+        else {
+            isProduct = true
+        }
     }
     
     init (category: String, productName: String, isProduct: Bool) {
-        self.productID = "-1"
-        self.businessID = "-1"
-        self.category = category
-        self.productName = productName
-        self.productPrice = "0.00"
-        self.timeLastUpdated = "0 minutes ago"
-        self.userLastUpdated = "DefaultUser"
-        self.isProduct = isProduct
+        self.businessID         = "n/a"
+        self.businessName       = "Default Business Name"
+        self.category           = category
+        self.productName        = productName
+        self.productPrice       = "0.00"
+        self.timeLastUpdated    = "0 minutes ago"
+        self.userLastUpdated    = "DefaultUser"
+        self.distance           = "0"
+        self.ccFlag             = false
+        self.open24Flag         = false
+        self.isProduct          = isProduct
     }
     
-    init (pID: String, bID: String, category: String, productName: String, price: String, time: String, user: String, isProduct: Bool) {
-        self.productID = pID
-        self.businessID = bID
-        self.category = category
-        self.productName = productName
-        self.productPrice = price
-        self.timeLastUpdated = time
-        self.userLastUpdated = user
-        self.isProduct = isProduct
+    init (bID: String, businessName: String, category: String, productName: String, price: String, time: String, user: String, dist: String, ccFlag: Bool, open24Flag: Bool, isProduct: Bool) {
+        self.businessID         = bID
+        self.businessName       = businessName
+        self.category           = category
+        self.productName        = productName
+        self.productPrice       = price
+        self.timeLastUpdated    = time
+        self.userLastUpdated    = user
+        self.distance           = dist
+        self.ccFlag             = ccFlag
+        self.open24Flag         = open24Flag
+        self.isProduct          = isProduct
     }
+    
     
     // Goes thru each business and tried to find the business that "self" (aka this product) belongs to.
     func getBusiness(listOfBusinesses: [Business]) -> Business {

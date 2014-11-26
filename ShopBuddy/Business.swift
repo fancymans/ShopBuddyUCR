@@ -41,9 +41,9 @@ class Business {
         self.address = address
         self.distance = distance
         self.listOfProducts = [Product]()
-        self.queryProductsFromDB()
+        // self.queryProductsFromDB()
     }
-    
+    /*
     func queryProductsFromDB () {
         var post: NSString = NSString(format: "StoreID=" + self.id)             // Post is what we send as input to server
         var url: NSURL = dbURL                                                  // URL of the PHP
@@ -87,11 +87,11 @@ class Business {
                 var pTime: String = responseData[i].objectForKey("TimeLastUpdated") as String
                 var pUser: String = responseData[i].objectForKey("UserLastUpdated") as String
                 
-                var tmpProduct = Product(pID: pID, bID: bID, category: "", productName: pName, price: pPrice, time: pTime, user: pUser, isProduct: true)
+                var tmpProduct = Product(bID: bID, category: "", productName: pName, price: pPrice, time: pTime, user: pUser, isProduct: true)
                 print(i); print(": ")
                 println("Appending product: " + pName)
                 listOfProducts.append(tmpProduct)
             }
         }
-    }
+    }*/
 }

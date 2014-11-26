@@ -22,7 +22,10 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     var currentIndex = Int()
     var listOfBusinesses: [Business] = [Business]()
     var totalListOfProducts: [Product] = [Product]()
-    
+    var sortBy = "Price"
+    var distance: NSString = "60"
+    var ccFilter = "0"
+    var tfsFilter = "0"
     // Location manager
     var locationManager = CLLocationManager()
     
@@ -80,13 +83,12 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         let currentProduct = totalListOfProducts[indexPath.row]
         
         // Set up variables for the cell
-        var tmpBusiness     = currentProduct.getBusiness(listOfBusinesses)
         var tmp_pName       = currentProduct.productName
-        var tmp_bName       = tmpBusiness.name
+        var tmp_bName       = currentProduct.businessName
         var tmp_price       = currentProduct.productPrice
         var tmp_time        = currentProduct.timeLastUpdated
         var tmp_user        = currentProduct.userLastUpdated
-        var tmp_distance    = tmpBusiness.distance
+        var tmp_distance    = currentProduct.distance
         
         // Assign the variables for the cell
         cell.setCell(tmp_pName, bName: tmp_bName, price: tmp_price, time: tmp_time, user: tmp_user, distance: tmp_distance)
@@ -187,8 +189,18 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         // Formatting lati and long into NSStrings to send
         var lati: NSString = NSString(format: "%.10f", manager.location.coordinate.latitude)
         var long: NSString = NSString(format: "%.10f", manager.location.coordinate.longitude)
-        var post: NSString = NSString(format: "lati=" + lati + "&long=" + long)                     // Post is what we send as input to server
-        var url: NSURL = NSURL(string:"http://shopbuddyucr.com/GetBusiness.php")!                   // URL of the PHP
+        
+        var distancePost: NSString = NSString(format: "&distance="  + distance)
+        
+        var ccPost: NSString = NSString(format: "&cc=" + ccFilter)
+        var tfsPost: NSString = NSString(format: "&tfs=" + tfsFilter)
+        
+        var post: NSString = NSString(format: "lati=" + lati + "&long=" + long + "&sort=" + sortBy + distancePost + ccPost + tfsPost)
+        
+        //var distancePost: NSString = NSString(format: "&distance" + distance)
+        
+        // Post is what we send as input to server
+        var url: NSURL = NSURL(string:"http://shopbuddyucr.com/GetProducts.php")!                   // URL of the PHP
         var postData: NSData = post.dataUsingEncoding(NSASCIIStringEncoding)!
         println("post: " + post)
         var postLength: NSString = String( postData.length )
@@ -205,30 +217,43 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         if (urlData != nil) {
 
             var error:NSError?
+            
             var responseData: NSArray = NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSArray
             
-            println("parsing business...")
+            //println("parsing business...")
             listOfBusinesses.removeAll(keepCapacity: false)
             totalListOfProducts.removeAll(keepCapacity: false)
+            
             for var i = 0; i < responseData.count; i++ {
-                var bLogo: String       = "100.jpg"
-                var bCat: String        = "Gas Station" as String
-                var bID: String         = responseData[i].objectForKey("ID") as String
-                var bName: String       = responseData[i].objectForKey("Name") as String
-                var bPhone: String      = responseData[i].objectForKey("PhoneNumber") as String
-                var bAddress: String    = responseData[i].objectForKey("Address") as String
-                var bDist: String       = responseData[i].objectForKey("dist") as String
-                bLogo = updateLogo(bName)
-
-                var tmpBusiness = Business(logo: bLogo, catergory: bCat, id: bID, name: bName, phoneNum: bPhone, address: bAddress, distance: bDist)
                 
-                /* Debug print code */
-                print(i); print(": ")
-                println("appending to listOfBusinesses")
+                var bID: String                 = responseData[i].objectForKey("ID") as String
+                var bName: String               = responseData[i].objectForKey("Name") as String
+                var pCategory: String           = responseData[i].objectForKey("Category") as String
+                var pName: String               = responseData[i].objectForKey("ItemName") as String
+                var pPrice: String              = responseData[i].objectForKey("Price") as String
+                var pTime: String               = responseData[i].objectForKey("TimeLastUpdated") as String
+                var pUser: String               = responseData[i].objectForKey("UserLastUpdated") as String
+                var pDist: String               = responseData[i].objectForKey("dist") as String
+                var creditCardAccept: String    = responseData[i].objectForKey("cc") as String
+                var pCcFlag: Bool               = false
+                var open24Hours: String         = responseData[i].objectForKey("open24") as String
+                var pOpen24Flag: Bool           = false
+                
+                if creditCardAccept == "1" {
+                    pCcFlag = true
+                }
+                if open24Hours == "1" {
+                    pOpen24Flag = true
+                }
+                
+                var tmpProduct = Product(bID: bID, businessName: bName, category: pCategory, productName: pName, price: pPrice, time: pTime, user: pUser, dist: pDist, ccFlag: pCcFlag, open24Flag: pOpen24Flag, isProduct: true)
+                
+                //* Debug print code
+                print(i); print(". ")
+                println("Appending product: " + pName)
                 // */
                 
-                listOfBusinesses.append(tmpBusiness)
-                self.storeAllProducts(tmpBusiness.listOfProducts)
+                totalListOfProducts.append(tmpProduct)
             }
         }
     }
@@ -295,6 +320,10 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             println("You need to fix setCurrentBusiness inside Details.swift")
             detailViewReference.setCurrentBusiness(Business())
             detailViewReference.setPreviousVC(self)
+        }
+        else if segue.identifier == "goto_Filter" {
+            var FilterVCReference: Filter = segue.destinationViewController as Filter
+            FilterVCReference.previousVC = self
         }
     }
 
