@@ -8,26 +8,26 @@
 
 import UIKit
 
-class Details: UIViewController {
-
-    @IBOutlet var storeName: UILabel!
+class Details: UIViewController, UITextFieldDelegate {
+    
+    var previousVC: SearchVC = SearchVC()
+    var detailProduct: Product!
+    var url: NSURL = NSURL(string: "http://shopbuddyucr.com/SubmitPrice.php")!
+    
+    @IBOutlet var image: UIImageView!
+    @IBOutlet var businessName: UILabel!
     @IBOutlet var address: UILabel!
     @IBOutlet var phoneNum: UILabel!
-    @IBOutlet var regular: UITextField!
-    @IBOutlet var midgrade: UITextField!
-    @IBOutlet var premium: UITextField!
-    @IBOutlet var diesel: UITextField!
-    @IBOutlet var image: UIImageView!
-    var businessID: String = ""
-    var currentBusiness: Business = Business()
+    @IBOutlet var productName: UILabel!
+    @IBOutlet var productPrice: UITextField!
+    @IBOutlet var user: UILabel!
+    @IBOutlet var time: UILabel!
+    
+    
     
     @IBAction func updatePrices(sender: AnyObject) {
-        println("Update prices not working, need to reimplement")
-        // currentBusiness.price87 = regular.text
-        // currentBusiness.price89 = midgrade.text
-        // currentBusiness.price91 = premium.text
-        // currentBusiness.priceD = diesel.text
-        // sendPricesToPHP()
+        // detailProduct.productPrice = productPrice.text
+        sendPricesToPHP()
     }
     
     @IBAction func doneTriggered(sender: AnyObject) {
@@ -37,8 +37,11 @@ class Details: UIViewController {
     }
     
     override func viewDidLoad() {
+        self.setCurrentProduct()
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        Business().getListOfBusinesses()
+        self.productPrice.delegate = self
         
         self.setLabels()
 //        self.navigationController?.navigationBarHidden = false;
@@ -49,34 +52,40 @@ class Details: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func setCurrentBusiness (currBusiness: Business) {
-        currentBusiness = currBusiness
+    // Dismiss keyboard when user presses return
+    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func setCurrentProduct() {
+        detailProduct = previousVC.currentProduct
     }
     
     func setLabels () {
-        businessID = currentBusiness.id
-        storeName.text = currentBusiness.name
-        address.text = currentBusiness.address
-        phoneNum.text = currentBusiness.phoneNum
-        regular.text = "N/A"// currentBusiness.price87
-        midgrade.text = "N/A"// currentBusiness.price89
-        premium.text = "N/A"// currentBusiness.price91
-        diesel.text = "N/A"// currentBusiness.priceD
-        image.image = UIImage(named: currentBusiness.logo)
+        println("setting labels")
+        var tmpListOfBusinesses: [Business] = Business().getListOfBusinesses()
+        var tmpBusiness: Business = detailProduct.getBusiness(tmpListOfBusinesses)
+        
+        image.image = UIImage(named: "sampleBusinessPhoto.png")
+        productName.text = detailProduct.productName
+        businessName.text = detailProduct.businessName
+        phoneNum.text = tmpBusiness.phoneNum
+        address.text = tmpBusiness.address
+        productPrice.text = "$" + detailProduct.productPrice
+        
     }
     
     func sendPricesToPHP() {
         // Formatting lati and long into NSStrings to send
-        var id: NSString = businessID
-        var price87: NSString = NSString(format: regular.text)
-        var price89: NSString = NSString(format: midgrade.text)
-        var price91: NSString = NSString(format: premium.text)
-        var priceD: NSString = NSString(format: diesel.text)
-        
-        var post: NSString = NSString(format: "ID=" + id + "&Price87=" + price87 + "&Price89=" + price89 + "&Price91=" + price91 + "&PriceD=" + priceD)
+        var bID: NSString = detailProduct.businessID
+        var pID: NSString = detailProduct.productID
+        var price: NSString = NSString(format: productPrice.text)
+        var user: NSString = NSString(format: "Darrin")
+        println("myID: " + detailProduct.productID)
+        var post: NSString = NSString(format: "ID=" + pID + "&Price=" + price + "&User=" + user)
         println(post)
         
-        var url: NSURL = NSURL(string:"http://shopbuddyucr.com/submitprices.php")!                 // URL of the PHP
         var postData: NSData = post.dataUsingEncoding(NSASCIIStringEncoding)!
         var postLength: NSString = String( postData.length )
         var request: NSMutableURLRequest = NSMutableURLRequest(URL: url)
@@ -95,12 +104,6 @@ class Details: UIViewController {
             NSLog("Response ==> %@", responseData);
         }
     }
-    
-    var previousVC: SearchVC = SearchVC()
-    func setPreviousVC(prevVC: SearchVC) {
-        previousVC = prevVC
-    }
-    
 
     /*
     // MARK: - Navigation

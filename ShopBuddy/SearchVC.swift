@@ -55,8 +55,8 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     
     // Update function
     override func viewDidLoad() {
+        println("updating view did load")
         super.viewDidLoad()
-        
         // If default text has been modified, auto-search query from searchBarText
         if productSearchBarText != "default" {
             productSearchBar.text = productSearchBarText
@@ -106,6 +106,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
 
     // Function that gets the current location of the user
     func getCurrentLocation() {
+        println("I am updating location")
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
@@ -170,8 +171,8 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     }
 
     func displayLocationInfo(placemark: CLPlacemark, manager: CLLocationManager) {
-        // Stop updating location after location has been obtained (less battery strain)
-        self.locationManager.stopUpdatingLocation()
+        // stop updating the location
+        manager.stopUpdatingLocation()
         
         // Display location info
         println("City: " + placemark.locality)
@@ -179,8 +180,9 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         println("State: " + placemark.administrativeArea)
         println("Country: " + placemark.country)
         
-        // Assign location variable
+        // Place location inside the search bar
         locationSearchBarText = String(placemark.locality as String + ", " + placemark.postalCode as String)
+        
         queryLocationFromPHP(manager)
         self.viewDidLoad()
     }
@@ -229,6 +231,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                 var bID: String                 = responseData[i].objectForKey("ID") as String
                 var bName: String               = responseData[i].objectForKey("Name") as String
                 var pCategory: String           = responseData[i].objectForKey("Category") as String
+                var pID : String                = responseData[i].objectForKey("ItemID") as String
                 var pName: String               = responseData[i].objectForKey("ItemName") as String
                 var pPrice: String              = responseData[i].objectForKey("Price") as String
                 var pTime: String               = responseData[i].objectForKey("TimeLastUpdated") as String
@@ -246,7 +249,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                     pOpen24Flag = true
                 }
                 
-                var tmpProduct = Product(bID: bID, businessName: bName, category: pCategory, productName: pName, price: pPrice, time: pTime, user: pUser, dist: pDist, ccFlag: pCcFlag, open24Flag: pOpen24Flag, isProduct: true)
+                var tmpProduct = Product(bID: bID, businessName: bName, category: pCategory, pID: pID, productName: pName, price: pPrice, time: pTime, user: pUser, dist: pDist, ccFlag: pCcFlag, open24Flag: pOpen24Flag, isProduct: true)
                 
                 //* Debug print code
                 print(i); print(". ")
@@ -299,7 +302,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             return "westerGas.png"
         }
         else {
-            return "genericGas.png"
+            return "sampleBusinessPhoto.png"
         }
     }
 
@@ -318,8 +321,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             currentProduct = totalListOfProducts[i.row]
             var detailViewReference: Details = segue.destinationViewController as Details
             println("You need to fix setCurrentBusiness inside Details.swift")
-            detailViewReference.setCurrentBusiness(Business())
-            detailViewReference.setPreviousVC(self)
+            detailViewReference.previousVC = self
         }
         else if segue.identifier == "goto_Filter" {
             var FilterVCReference: Filter = segue.destinationViewController as Filter

@@ -9,12 +9,10 @@
 import Foundation
 
 class Product {
-    // Business vars
     var businessID: String
     var businessName: String
     var category: String
-    
-    // Product vars
+    var productID: String
     var productName: String
     var productPrice: String
     var timeLastUpdated: String
@@ -28,6 +26,7 @@ class Product {
         self.businessID         = "-1"
         self.businessName       = "Default Business Name"
         self.category           = "Default Catagory Name"
+        self.productID          = "-1"
         self.productName        = "Default Product Name"
         self.productPrice       = "0.00"
         self.timeLastUpdated    = "0 minutes ago"
@@ -42,6 +41,7 @@ class Product {
         self.businessID         = "n/a"
         self.businessName       = "Default Business Name"
         self.category           = category
+        self.productID          = "n/a"
         self.productName        = productName
         self.productPrice       = "n/a"
         self.timeLastUpdated    = "n/a"
@@ -62,6 +62,7 @@ class Product {
         self.businessID         = "n/a"
         self.businessName       = "Default Business Name"
         self.category           = category
+        self.productID          = "n/a"
         self.productName        = productName
         self.productPrice       = "0.00"
         self.timeLastUpdated    = "0 minutes ago"
@@ -72,10 +73,11 @@ class Product {
         self.isProduct          = isProduct
     }
     
-    init (bID: String, businessName: String, category: String, productName: String, price: String, time: String, user: String, dist: String, ccFlag: Bool, open24Flag: Bool, isProduct: Bool) {
+    init (bID: String, businessName: String, category: String, pID: String, productName: String, price: String, time: String, user: String, dist: String, ccFlag: Bool, open24Flag: Bool, isProduct: Bool) {
         self.businessID         = bID
         self.businessName       = businessName
         self.category           = category
+        self.productID          = pID
         self.productName        = productName
         self.productPrice       = price
         self.timeLastUpdated    = time
