@@ -101,6 +101,9 @@ class Details: UIViewController, UITextFieldDelegate {
         var bID: NSString = detailProduct.businessID
         var pID: NSString = detailProduct.productID
         var price: NSString = NSString(format: productPrice.text)
+
+        var prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+
         var user: NSString = NSString(format: "Darrin")
         println("myID: " + detailProduct.productID)
         var post: NSString = NSString(format: "ID=" + pID + "&Price=" + price + "&User=" + user)

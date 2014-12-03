@@ -13,13 +13,13 @@ class LoginVC: UIViewController {
     @IBOutlet var username: UITextField!
     @IBOutlet var password: UITextField!
     
-    var prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    var prefs = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+
         prefs.setInteger(0, forKey: "isLoggedIn")
+        prefs.setObject("", forKey: "currentUserName")
         prefs.synchronize()
         // Do any additional setup after loading the view.
     }
@@ -67,6 +67,7 @@ class LoginVC: UIViewController {
             
                 if (responseData == "TRUE") {
                     prefs.setInteger(1, forKey: "isLoggedIn")
+                    prefs.setObject(username.text, forKey: "currentUserName")
                     prefs.synchronize()
                     self.performSegueWithIdentifier(
                         "goto_mainBoard", sender: self)
@@ -89,16 +90,5 @@ class LoginVC: UIViewController {
             }
         }
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
