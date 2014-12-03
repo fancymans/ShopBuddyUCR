@@ -126,10 +126,10 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
     func loadCatalog () {
         arrayOfProducts.append(Product(category: "Gas", productName: ""))
         arrayOfProducts.append(Product(category: "Gas", productName: "Regular Gas"))
-        arrayOfProducts.append(Product(category: "Gas", productName: "Price87"))
-        arrayOfProducts.append(Product(category: "Gas", productName: "Price89"))
-        arrayOfProducts.append(Product(category: "Gas", productName: "Price91"))
-        arrayOfProducts.append(Product(category: "Gas", productName: "PriceD"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Gas 87"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Gas 89"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Gas 91"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Gas Diesel"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Mid-grade Gas"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Diesel Gas"))
         
@@ -157,7 +157,7 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
 
         arrayOfProducts.append(Product(category: "Cloth", productName: ""))
         arrayOfProducts.append(Product(category: "Cloth", productName: "T-Shirt"))
-        arrayOfProducts.append(Product(category: "Cloth", productName: "Jeans"))
+        arrayOfProducts.append(Product(category: "Cloth", productName: "Pants"))
         arrayOfProducts.append(Product(category: "Cloth", productName: "Swimsuit"))
     }
     

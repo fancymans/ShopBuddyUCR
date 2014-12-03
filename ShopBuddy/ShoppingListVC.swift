@@ -14,7 +14,7 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var arrayOfShoppingItems: [NSString] = [NSString] ()
     var queryText: String = ""
-    var routeDistLimit = ["5 miles","10 miles","25 miles","50 miles","Nigga IDGAF take me to Antarctica"]
+    var routeDistLimit = ["Nigga IDGAF take me to Antarctica", "5 miles","10 miles","25 miles","50 miles"]
     
     var requestedLimit = "No Limit"
     
