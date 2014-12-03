@@ -23,15 +23,11 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     var distance: NSString = "60"
     var ccFilter = "0"
     var tfsFilter = "0"
-    
-    
+
     var filteredListOfProducts: [Product] = [Product]()
     var isFiltered: Bool = false
     
-    
-    
     var currentUserName: String = "guest"
-    
     
     // Location manager
     let locationManager = CLLocationManager()
@@ -41,29 +37,27 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     @IBOutlet var locationSearchBar: UISearchBar!
     @IBOutlet var resultsTable: UITableView!
     @IBOutlet var busyIndicator: UIActivityIndicatorView!
-    
-    
-    
+
     @IBAction func getCurrentLocation(sender: UIButton) {
+        println("getting user CURRENT location")
+        locationSearchBar.text = ""
+        busyIndicator.startAnimating()
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
-        busyIndicator.startAnimating()
+        busyIndicator.stopAnimating()
     }
     
     // Update function
     override func viewDidLoad() {
-        println("updating view did load")
+
         super.viewDidLoad()
-        // If default text has been modified, auto-search query from searchBarText
+        println("updating view did load")
+        busyIndicator.stopAnimating()
+
         if productSearchBarText != "default" {
             productSearchBar.text = productSearchBarText
-        }
-        // If current location has been obtained, update search location text
-        if locationSearchBarText != "default" {
-            locationSearchBar.text = locationSearchBarText
-            // self.locationManager.startUpdatingLocation()
         }
 
         self.productSearchBar.delegate = self
@@ -82,14 +76,23 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     
     // Dismiss keyboard when user presses "Search"
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        // run search for current location
-        if (locationSearchBarText != locationSearchBar.text) {
-            println("getting user requested location")
-            self.locationManager.startUpdatingLocation()
-        }
-        
-        // dismiss keyboard
         searchBar.resignFirstResponder()
+        println("Keyboard Search Button Pressed")
+        // run search for current location
+        println("locationSearchBarText: " + locationSearchBarText)
+        println("locationSearchBar.text: " + locationSearchBar.text)
+        if (locationSearchBarText != locationSearchBar.text) {
+            println("getting user SPECIFIED location")
+
+            busyIndicator.startAnimating()
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager.startUpdatingLocation()
+            busyIndicator.stopAnimating()
+        }
+
+        // dismiss keyboard
         self.viewDidLoad()
     }
     
@@ -227,27 +230,29 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                 }
                 
                 if placemarks.count > 0 {
-                    // Stop updating location after location has been obtained (less battery strain)
-                    // self.locationManager.stopUpdatingLocation()
-                    manager.stopUpdatingLocation()
                     let pm = placemarks[0] as CLPlacemark
                     self.displayLocationInfo(pm, manager: manager)
                 }
-                else{
+                else {
                     println("Error with data recv from geocoder")
                 }
             })
         }
         else {
             // This function looks at the address put in the search bar and returns the latti and longi of said location
+            println("getting the location: " + locationSearchBar.text)
             CLGeocoder().geocodeAddressString(locationSearchBar.text, {(placemarks: [AnyObject]!, error: NSError!) -> Void in
                 if let placemark = placemarks?[0] as? CLPlacemark {
-                    let location = CLLocationCoordinate2D( latitude: placemark.location.coordinate.latitude, longitude: placemark.location.coordinate.longitude )
-                    println(location.longitude);
-                    println(location.latitude);
+                    let location = CLLocationCoordinate2D( latitude: placemark.location.coordinate.latitude, longitude: placemark.location.coordinate.longitude)
+
+                    let pm = placemarks[0] as CLPlacemark
+                    self.displayLocationInfo(pm, manager: manager)
+
                 }   // end of if
             })      // end of function call
         }
+
+        manager.stopUpdatingLocation()
     }
     // ____________________________________________________________
     
@@ -268,12 +273,13 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         println("Zip Code: " + placemark.postalCode)
         println("State: " + placemark.administrativeArea)
         println("Country: " + placemark.country)
-        
+
         // Place location inside the search bar
-        // locationSearchBarText = String(placemark.locality as String + ", " + placemark.postalCode as String)
-        
+        locationSearchBar.text = String(placemark.locality as String + ", " + placemark.postalCode as String)
+        locationSearchBarText = locationSearchBar.text
+
         queryLocationFromPHP(manager)
-        busyIndicator.stopAnimating()
+
         self.viewDidLoad()
     }
     // ____________________________________________________________
