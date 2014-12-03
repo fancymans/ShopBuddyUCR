@@ -40,12 +40,11 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
     
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltered == true{
+        if isFiltered {
             return filteredProducts.count
         }
-        else{
+        else {
             return arrayOfProducts.count
-    
         }
     }
 
@@ -53,25 +52,23 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
         
         let cell: ProductCell = tableView.dequeueReusableCellWithIdentifier("catalogItem") as ProductCell
         let currentProduct = arrayOfProducts[indexPath.row]
-//        cell.setCell(currentProduct.category, productName: currentProduct.productName, isProduct:currentProduct.isProduct)
+        // cell.setCell(currentProduct.category, productName: currentProduct.productName, isProduct:currentProduct.isProduct)
         
-        if isFiltered == true{
+        if isFiltered {
             let currentFilteredProduct = filteredProducts[indexPath.row]
 
             cell.setCell(currentFilteredProduct.category, productName: currentFilteredProduct.productName, isProduct:currentFilteredProduct.isProduct)
         }
-        else{
+        else {
             cell.setCell(currentProduct.category, productName: currentProduct.productName, isProduct:currentProduct.isProduct)
         }
         
-        
         return cell
     }
+    
     @IBAction func cancelTriggered(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String){
 //        println("searchbar called")
@@ -88,7 +85,7 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
             //empty filteredProducts
             filteredProducts = []
             
-            var stringString : String
+            // var stringString : String
             
 //            println("before enumer")
             //fast enumerate
@@ -100,14 +97,14 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
 ////                println("searchText:", (searchText))
                 
                 var stringMatch = arrayOfProducts[i].productName.lowercaseString.rangeOfString(searchText)
-//                
+                var stringMatch2 = arrayOfProducts[i].productName.rangeOfString(searchText)
+                var stringMatch3 = arrayOfProducts[i].productName.uppercaseString.rangeOfString(searchText)
 //                println("stringMatch:")
 //                println(stringMatch)
 //                println("productname")
 //                println(arrayOfProducts[i].productName)
                 
-                if(stringMatch != nil)
-                {
+                if (stringMatch != nil) || (stringMatch2 != nil) || (stringMatch3 != nil) {
                     var newCategory : String = arrayOfProducts[i].category
                     var newProduct : String = arrayOfProducts[i].productName
                     
@@ -129,6 +126,10 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
     func loadCatalog () {
         arrayOfProducts.append(Product(category: "Gas", productName: ""))
         arrayOfProducts.append(Product(category: "Gas", productName: "Regular Gas"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Price87"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Price89"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "Price91"))
+        arrayOfProducts.append(Product(category: "Gas", productName: "PriceD"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Mid-grade Gas"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Diesel Gas"))
         

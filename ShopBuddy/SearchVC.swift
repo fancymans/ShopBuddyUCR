@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate {
+class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     // Optional variables
     var productSearchBarText: String = "default"
@@ -17,12 +17,18 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     var data: NSMutableData = NSMutableData()
     var currentProduct: Product = Product()
     var currentIndex: Int = Int()
-    var listOfBusinesses: [Business] = [Business]()
+    // var listOfBusinesses: [Business] = [Business]()
     var totalListOfProducts: [Product] = [Product]()
     var sortBy = "Price"
     var distance: NSString = "60"
     var ccFilter = "0"
     var tfsFilter = "0"
+    
+    
+    var filteredListOfProducts: [Product] = [Product]()
+    var isFiltered: Bool = false
+    
+    
     // Location manager
     let locationManager = CLLocationManager()
     
@@ -30,12 +36,16 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     @IBOutlet var productSearchBar: UISearchBar!
     @IBOutlet var locationSearchBar: UISearchBar!
     @IBOutlet var resultsTable: UITableView!
+    @IBOutlet var busyIndicator: UIActivityIndicatorView!
+    
+    
     
     @IBAction func getCurrentLocation(sender: UIButton) {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
+        busyIndicator.startAnimating()
     }
     
     // Update function
@@ -52,6 +62,8 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             // self.locationManager.startUpdatingLocation()
         }
 
+        self.productSearchBar.delegate = self
+        self.locationSearchBar.delegate = self
         self.resultsTable.delegate = self
         self.resultsTable.dataSource = self
         resultsTable.reloadData()
@@ -64,32 +76,60 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
     
+    // Dismiss keyboard when user presses "Search"
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
     
     //
     // MARK: - Table View functions
     // ____________________________________________________________
     // Function that sets up each cell inside the tableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: ResultCell = tableView.dequeueReusableCellWithIdentifier("searchResultCell") as ResultCell
-        let currentProduct = totalListOfProducts[indexPath.row]
         
-        // Set up variables for the cell
-        var tmp_pName       = currentProduct.productName
-        var tmp_bName       = currentProduct.businessName
-        var tmp_price       = currentProduct.productPrice
-        var tmp_time        = currentProduct.timeLastUpdated
-        var tmp_user        = currentProduct.userLastUpdated
-        var tmp_distance    = currentProduct.distance
+        let cell: ResultCell = tableView.dequeueReusableCellWithIdentifier("searchResultCell") as ResultCell
         
         // Assign the variables for the cell
-        cell.setCell(tmp_pName, bName: tmp_bName, price: tmp_price, time: tmp_time, user: tmp_user, distance: tmp_distance)
+        if isFiltered {
+            let currentFilteredProduct = filteredListOfProducts[indexPath.row]
+            
+            // Set up variables for the cell
+            var tmp_pName       = currentFilteredProduct.productName
+            var tmp_bName       = currentFilteredProduct.businessName
+            var tmp_price       = currentFilteredProduct.productPrice
+            var tmp_time        = currentFilteredProduct.timeLastUpdated
+            var tmp_user        = currentFilteredProduct.userLastUpdated
+            var tmp_distance    = currentFilteredProduct.distance
+            
+            // Init the cell
+            cell.setCell(tmp_pName, bName: tmp_bName, price: tmp_price, time: tmp_time, user: tmp_user, distance: tmp_distance)
+        }
+        else {
+            let currentProduct = totalListOfProducts[indexPath.row]
+            
+            // Set up variables for the cell
+            var tmp_pName       = currentProduct.productName
+            var tmp_bName       = currentProduct.businessName
+            var tmp_price       = currentProduct.productPrice
+            var tmp_time        = currentProduct.timeLastUpdated
+            var tmp_user        = currentProduct.userLastUpdated
+            var tmp_distance    = currentProduct.distance
+            
+            cell.setCell(tmp_pName, bName: tmp_bName, price: tmp_price, time: tmp_time, user: tmp_user, distance: tmp_distance)
+        }
+        
         return cell
     }
     // ____________________________________________________________
     
     // Function that returns the number of rows in the table
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return totalListOfProducts.count
+        if isFiltered {
+            return filteredListOfProducts.count
+        }
+        else {
+            return totalListOfProducts.count
+        }
     }
     // ____________________________________________________________
     
@@ -98,6 +138,44 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         println("You selected custom cell #: " + String(format: "%i", indexPath.row))
         currentProduct = totalListOfProducts[indexPath.row]
+    }
+
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if countElements(searchText) == 0 {
+            isFiltered = false
+        }
+        else {
+            isFiltered = true
+            filteredListOfProducts.removeAll(keepCapacity: false)
+            // var stringString: String
+
+            for var i = 0; i < totalListOfProducts.count; i++ {
+                var productMatchLC = totalListOfProducts[i].productName.lowercaseString.rangeOfString(searchText)
+                var productMatchUC = totalListOfProducts[i].productName.uppercaseString.rangeOfString(searchText)
+                var productMatchExact = totalListOfProducts[i].productName.rangeOfString(searchText)
+                
+                var businessMatchLC = totalListOfProducts[i].businessName.lowercaseString.rangeOfString(searchText)
+                var businessMatchUC = totalListOfProducts[i].businessName.uppercaseString.rangeOfString(searchText)
+                var businessMatchExact = totalListOfProducts[i].businessName.rangeOfString(searchText)
+                
+                if (productMatchLC != nil) || (productMatchUC != nil) || (productMatchExact != nil) || (businessMatchLC != nil) || (businessMatchUC != nil) || (businessMatchExact != nil) {
+                    filteredListOfProducts.append(totalListOfProducts[i])
+                }
+            }
+        }
+        resultsTable.reloadData()
+    }
+    
+    func filterContentForSearchText(searchText: String) {
+        self.filteredListOfProducts = self.totalListOfProducts.filter({(product: Product) -> Bool in
+            let stringMatch = product.productName.rangeOfString(searchText)
+            return (stringMatch != nil)
+        })
+    }
+    
+    func searchDisplayController(controller: UISearchDisplayController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
+        self.filterContentForSearchText(searchString)
+        return true
     }
     // ____________________________________________________________
     // END: - Table View functions
@@ -110,7 +188,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     // ____________________________________________________________
     // Function that gets the current location of the user
     func getCurrentLocation() {
-        println("I am updating location")
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
@@ -185,6 +262,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         locationSearchBarText = String(placemark.locality as String + ", " + placemark.postalCode as String)
         
         queryLocationFromPHP(manager)
+        busyIndicator.stopAnimating()
         self.viewDidLoad()
     }
     // ____________________________________________________________
@@ -229,8 +307,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             
             var responseData: NSArray = NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSArray
             
-            //println("parsing business...")
-            listOfBusinesses.removeAll(keepCapacity: false)
+            println("parsing products...")
             totalListOfProducts.removeAll(keepCapacity: false)
             
             for var i = 0; i < responseData.count; i++ {

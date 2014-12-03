@@ -36,7 +36,7 @@ class ResultCell: UITableViewCell {
         self.price.text = "$" + price
         self.time.text = time
         self.user.text = user
-        self.distance.text = "~" + distance + " mi."
+        self.distance.text = distance + " mi."
     }
     
     func setCell (pName: String, bName: String, price: String, time: String, user: String, distance: String) {
@@ -45,6 +45,6 @@ class ResultCell: UITableViewCell {
         self.price.text = "$" + price
         self.time.text = time
         self.user.text = user
-        self.distance.text = "~" + distance + " mi."
+        self.distance.text = distance + " mi."
     }
 }

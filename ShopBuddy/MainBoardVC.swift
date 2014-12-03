@@ -22,6 +22,7 @@ class MainBoardVC: UITabBarController {
                 var tmpVC: SearchVC = self.selectedViewController as SearchVC
                 tmpVC.productSearchBar.text = queryRequestText
                 tmpVC.getCurrentLocation();
+                tmpVC.busyIndicator.startAnimating()
             }
         }
     }

@@ -86,7 +86,7 @@ class Filter: UIViewController, UIPickerViewDelegate {
         else if(previousVC.distance == "60") {
             DistanceSC.selectedSegmentIndex = 3
         }
-        else if(previousVC.distance == "nolimit") {
+        else if(previousVC.distance == "99999") {
             DistanceSC.selectedSegmentIndex = 4
         }
     }
@@ -133,7 +133,7 @@ class Filter: UIViewController, UIPickerViewDelegate {
             previousVC.distance = "60"
         case 4:
             println("No Filter segemnet clicked")
-            previousVC.distance = "nolimit"
+            previousVC.distance = "99999"
         default:
             break;
         }  //Switch

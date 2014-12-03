@@ -8,16 +8,19 @@
 
 import UIKit
 
-class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate {
     
     @IBOutlet var shoppingListTable: UITableView!
     
-    var arrayOfShoppingItems: [String] = [String] ()
+    var arrayOfShoppingItems: [NSString] = [NSString] ()
     var queryText: String = ""
+    var routeDistLimit = ["5 miles","10 miles","25 miles","50 miles","Nigga IDGAF take me to Antarctica"]
+    
+    var requestedLimit = "No Limit"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        distLimitV.hidden = true
         // Do any additional setup after loading the view.
         self.shoppingListTable.delegate = self
         self.shoppingListTable.dataSource = self
@@ -30,11 +33,26 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
 
+    
+
+    @IBOutlet var distLimitV: UIView!
+    
+    @IBAction func BestRouteRequested(sender: AnyObject) {
+        distLimitV.hidden = false
+    }
+    
+
+    @IBAction func BestRouteRequestedDismiss(sender: AnyObject) {
+        distLimitV.hidden = true
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell: ShoppingCell = tableView.dequeueReusableCellWithIdentifier("shoppingItem") as ShoppingCell
         let currentItem = arrayOfShoppingItems[indexPath.row]
         cell.setCell (arrayOfShoppingItems[indexPath.row])
+        
+        
         
         return cell
     }
@@ -61,7 +79,28 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
 
     }
     
-
+    func numberOfComponentsInPickerView(pickerView: UIPickerView!) -> Int
+    {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView!, numberOfRowsInComponent component: Int) -> Int
+    {
+        return routeDistLimit.count
+    }
+    
+    func pickerView(pickerView: UIPickerView!, titleForRow row: Int, forComponent component: Int) -> String!
+    {
+        return "\(routeDistLimit[row])"
+    }
+    
+    func pickerView(pickerView: UIPickerView!, didSelectRow row: Int, inComponent component: Int)
+    {
+        requestedLimit = "\(routeDistLimit[row])"
+        
+        //println("\(routeDistLimit[row])")
+        
+    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -72,6 +111,14 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "goto_productsCatalog" {
             var nextVC: ProductsCatalogVC = segue.destinationViewController as ProductsCatalogVC
             nextVC.setPrevVC(self)
+        }
+        else if segue.identifier == "goto_BestRoute" {
+            distLimitV.hidden = true
+            
+            var BestRouteVCReference: ShortestPathVC = segue.destinationViewController as ShortestPathVC
+            //println("WENT THROUGHT THIS MOTHAFUCKAAAA")
+            BestRouteVCReference.previousVC = self
+            
         }
     }
 }

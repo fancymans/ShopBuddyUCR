@@ -262,6 +262,7 @@
 					};
 					3EA542BC1A1870A200BDFCBC = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = PK5L3QCYXA;
 						TestTargetID = 3EA542A51A1870A200BDFCBC;
 					};
 				};
