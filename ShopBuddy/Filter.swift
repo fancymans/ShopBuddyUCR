@@ -18,14 +18,10 @@ class Filter: UIViewController, UIPickerViewDelegate {
     var tfsFilter = 0
     var carwashFilter = 0
     var previousVC: SearchVC = SearchVC()
-   
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
+
         initsort()
         initDistance()
         initcc()
