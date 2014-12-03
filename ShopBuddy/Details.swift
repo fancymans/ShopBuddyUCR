@@ -31,6 +31,7 @@ class Details: UIViewController, UITextFieldDelegate {
         detailProduct.userLastUpdated = currentUserName
         productPrice.resignFirstResponder()
         sendPricesToPHP()
+        self.viewDidLoad()
     }
     
     @IBAction func doneTriggered(sender: AnyObject) {
@@ -72,10 +73,11 @@ class Details: UIViewController, UITextFieldDelegate {
         image.image = UIImage(named: "sampleBusinessPhoto.png")
         productName.text = detailProduct.productName
         businessName.text = detailProduct.businessName
-        user.text = detailProduct.userLastUpdated
         phoneNum.text = tmpBusiness.phoneNum
         address.text = tmpBusiness.address
         productPrice.text = detailProduct.productPrice
+        user.text = detailProduct.userLastUpdated
+        time.text = detailProduct.timeLastUpdated
         
         if detailProduct.ccFlag {
             ccFlagLabel.text = "Yes"
