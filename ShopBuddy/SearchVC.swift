@@ -78,7 +78,15 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     
     // Dismiss keyboard when user presses "Search"
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        // run search for current location
+        if (locationSearchBarText != locationSearchBar.text) {
+            println("getting user requested location")
+            self.locationManager.startUpdatingLocation()
+        }
+        
+        // dismiss keyboard
         searchBar.resignFirstResponder()
+        self.viewDidLoad()
     }
     
     //
@@ -206,26 +214,26 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
 
         // This function gets the user's current location.
-        CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error)->Void in
-            if error != nil {
-                println("Reverse geocoder failed with error")
-                println("Error: " + error.localizedDescription)
-                return
-            }
-            
-            if placemarks.count > 0 {
-                // Stop updating location after location has been obtained (less battery strain)
-                // self.locationManager.stopUpdatingLocation()
-                manager.stopUpdatingLocation()
-                let pm = placemarks[0] as CLPlacemark
-                self.displayLocationInfo(pm, manager: manager)
-            }
-            else{
-                println("Error with data recv from geocoder")
-            }
-        })
-        
-        /*
+        if locationSearchBar.text == "" {
+            CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error)->Void in
+                if error != nil {
+                    println("Reverse geocoder failed with error")
+                    println("Error: " + error.localizedDescription)
+                    return
+                }
+                
+                if placemarks.count > 0 {
+                    // Stop updating location after location has been obtained (less battery strain)
+                    // self.locationManager.stopUpdatingLocation()
+                    manager.stopUpdatingLocation()
+                    let pm = placemarks[0] as CLPlacemark
+                    self.displayLocationInfo(pm, manager: manager)
+                }
+                else{
+                    println("Error with data recv from geocoder")
+                }
+            })
+        }
         else {
             // This function looks at the address put in the search bar and returns the latti and longi of said location
             CLGeocoder().geocodeAddressString(locationSearchBar.text, {(placemarks: [AnyObject]!, error: NSError!) -> Void in
@@ -236,7 +244,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                 }   // end of if
             })      // end of function call
         }
-        */
     }
     // ____________________________________________________________
     
@@ -259,7 +266,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         println("Country: " + placemark.country)
         
         // Place location inside the search bar
-        locationSearchBarText = String(placemark.locality as String + ", " + placemark.postalCode as String)
+        // locationSearchBarText = String(placemark.locality as String + ", " + placemark.postalCode as String)
         
         queryLocationFromPHP(manager)
         busyIndicator.stopAnimating()
