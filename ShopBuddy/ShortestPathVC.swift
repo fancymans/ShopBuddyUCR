@@ -15,7 +15,8 @@ class ShortestPathVC: UIViewController, UITableViewDataSource, UITableViewDelega
     var arrayOfResults: [String] = [String]()
     var wishlist: [Product] = [Product]()
     var previousVC: ShoppingListVC = ShoppingListVC()
-    
+    var outofRange: [String] = [String]()
+    var outofRangeFlag: Bool = false
     var dists: [Double] = [Double]()
     
     // Update function
@@ -30,19 +31,41 @@ class ShortestPathVC: UIViewController, UITableViewDataSource, UITableViewDelega
         for (index, value) in enumerate(previousVC.arrayOfShoppingItems) {
            // println("Item \(index + 1): \(value)")
             pullCheapestProductFromPHP(value, distLimit: previousVC.requestedLimit)
+            if(outofRangeFlag == true) {
+                outofRange.append(value)
+                outofRangeFlag = false
+            }
             
         }
+       
+            //println(outofRange)
+        
+        if(outofRange.count >= 1) {
+            var alert:UIAlertView = UIAlertView()
+            alert.title = "Product(s) not within Range!"
+            var text = "These items are not close enough to you: \n"
+            for var i = 0; i < outofRange.count; i++ {
+                text = text + outofRange[i] + "\n"
+            }
+            alert.message = text
+            alert.delegate = self
+            alert.addButtonWithTitle("Got It")
+            alert.show()
+        }
+        
        // let numMin = dists.reduce(Int.max, { min($0, $1) })
-        var maxDist = minElement(dists)
+        if(dists.count != 0) {
+            var maxDist = minElement(dists)
+        }
         
         shortestPathTableView.reloadData()
     }
 
     func pullCheapestProductFromPHP(itemName: NSString, distLimit: NSString){
-        
-            
+            println("Distance Limit Sent:    " +  distLimit)
+            println("                        " + itemName)
             var post: NSString = NSString(format: "&itemname=" + itemName + "&distlimit=" + distLimit)
-            //println(itemName)
+        
        
             //var distancePost: NSString = NSString(format: "&distance" + distance)
             
@@ -72,34 +95,48 @@ class ShortestPathVC: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 var responseData: NSArray = NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSArray
                 
+                if(responseData.count == 0){
+                    println("You got no results back nigger")
+                    outofRangeFlag = true
+                }
+                else{
+                   // println("Yes results baby")
+                }
                 //println("parsing business...")
                 listOfBusinesses.removeAll(keepCapacity: false)
                // totalListOfProducts.removeAll(keepCapacity: false)
                 
+                
                 for var i = 0; i < responseData.count; i++ {
-                    
-                    
                     var pName: String               = responseData[i].objectForKey("ItemName") as String
-                    var Price: String              = responseData[i].objectForKey("price") as String
-                    var bName: String               = responseData[i].objectForKey("name") as String
-                    var Address: String               = responseData[i].objectForKey("Address") as String
-                    var PhoneNumber: String    = responseData[i].objectForKey("PhoneNumber") as String
-                    var Longitude: String    = responseData[i].objectForKey("Longi") as String
-                    var Latitude: String    = responseData[i].objectForKey("Latti") as String
-                    var Distance: NSString    = responseData[i].objectForKey("dist") as NSString
-                    
+                    var Price: String               = responseData[i].objectForKey("Price") as String
+                    var bName: String               = responseData[i].objectForKey("Name") as String
+                    var Address: String             = responseData[i].objectForKey("Address") as String
+                    var PhoneNumber: String         = responseData[i].objectForKey("PhoneNumber") as String
+                    var Longitude: String           = responseData[i].objectForKey("Longi") as String
+                    var Latitude: String            = responseData[i].objectForKey("Latti") as String
+                    var Distance: NSString          = responseData[i].objectForKey("dist") as NSString
+                    //println(Distance + "   " + Address)
                  //   var tmpProduct = Product(bID: bID, businessName: bName, category: pCategory, pID: pID, productName: pName, price: pPrice, time: pTime, user: pUser, dist: pDist, ccFlag: pCcFlag, open24Flag: pOpen24Flag, isProduct: true)
                     
                     //* Debug print code
                     //print(i); print(". ")
-                    println("Appending product: " + pName )
-                    println(Distance)
-                    println("Price: " + Price)
-                    // */
-                    dists.append(Distance.doubleValue)
+
+                        //println("Appending product: " + pName )
+                        //println(Distance)
+                        //println("Price: " + Price)
+                        // */
+                    
+                    var temp: Product = Product(bID: bName, businessName: bName, category: Address, pID: PhoneNumber, productName: pName, price: Price, time: "nade", user: "nada", dist: Distance, ccFlag: false, open24Flag: false, isProduct: true)
+                    wishlist.append(temp)
+                    
+                        dists.append(Distance.doubleValue)
+
                   //  totalListOfProducts.append(tmpProduct)
                 }
+                
             }
+        
         
         
     }
@@ -117,12 +154,24 @@ class ShortestPathVC: UIViewController, UITableViewDataSource, UITableViewDelega
     // Set up each ShortestPathCell here
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: ShortestPathCell = tableView.dequeueReusableCellWithIdentifier("shortestPathCell") as ShortestPathCell
-        cell.setCell("BestBuy", productName: "iPad", isProduct: false)
+        var businessName = wishlist[indexPath.row].businessName
+        var businessAddress = wishlist[indexPath.row].category
+        var businessPhoneNumber = wishlist[indexPath.row].productID
+        println(businessName)
+        var distance = wishlist[indexPath.row].distance
+        let myrange = Range(start:advance(distance.startIndex,1), end: advance(distance.startIndex,5))
+
+        distance = distance.substringWithRange(myrange)
+        var productName = wishlist[indexPath.row].productName
+        var price = wishlist[indexPath.row].productPrice
+        
+        cell.setCell(businessName, productName: productName, isProduct: true, productDistance: distance, businessPhoneNumber: businessPhoneNumber, businessAddress: businessAddress, pprice: price, number: indexPath.row+1)
+        
         return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listOfBusinesses.count;
+        return wishlist.count;
     }
 
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {

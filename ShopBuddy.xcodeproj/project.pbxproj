@@ -261,11 +261,11 @@
 				TargetAttributes = {
 					3EA542A51A1870A200BDFCBC = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = PK5L3QCYXA;
+						DevelopmentTeam = 93UDA7RVY4;
 					};
 					3EA542BC1A1870A200BDFCBC = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = PK5L3QCYXA;
+						DevelopmentTeam = 93UDA7RVY4;
 						TestTargetID = 3EA542A51A1870A200BDFCBC;
 					};
 				};
