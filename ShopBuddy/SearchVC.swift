@@ -146,7 +146,12 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     // This is NOT called if the cell is set to segue to another view
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         // println("You selected custom cell #: " + String(format: "%i", indexPath.row))
-        currentProduct = totalListOfProducts[indexPath.row]
+        if isFiltered {
+            currentProduct = filteredListOfProducts[indexPath.row]
+        }
+        else {
+            currentProduct = totalListOfProducts[indexPath.row]
+        }
     }
 
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -414,7 +419,13 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         if segue.identifier == "goto_Details" {
             // println("going to Details")
             var i: NSIndexPath = resultsTable.indexPathForSelectedRow()!
-            currentProduct = totalListOfProducts[i.row]
+            if isFiltered {
+                currentProduct = filteredListOfProducts[i.row]
+            }
+            else {
+                currentProduct = totalListOfProducts[i.row]
+            }
+            
             var detailViewReference: Details = segue.destinationViewController as Details
             detailViewReference.previousVC = self
             println("SearchVC current username: " + currentUserName)

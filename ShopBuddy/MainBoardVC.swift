@@ -17,16 +17,17 @@ class MainBoardVC: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        println("Current Username: " + currentUser.username)
+//        println("Current Username: " + currentUser.username)
         // Do any additional setup after loading the view.
         if segueIndex == 0 {
             self.selectedIndex = 1
             var tmpVC1: SearchVC = self.selectedViewController as SearchVC
             tmpVC1.currentUserName = currentUser.username
+            tmpVC1.getCurrentLocation()
             
             self.selectedIndex = segueIndex
             var tmpVC2: FeaturedVC = self.selectedViewController as FeaturedVC
-            println("Current Username2: " + currentUser.username)
+//            println("Current Username2: " + currentUser.username)
             tmpVC2.currentUserName = currentUser.username
         }
         if segueIndex == 1 {
@@ -48,7 +49,7 @@ class MainBoardVC: UITabBarController {
     
     func setCurrentUser(newUser: User) {
         currentUser = newUser
-        println("Set current user to: " + currentUser.username)
+//        println("Set current user to: " + currentUser.username)
         self.viewDidLoad()
     }
 
