@@ -39,7 +39,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     @IBOutlet var busyIndicator: UIActivityIndicatorView!
 
     @IBAction func getCurrentLocation(sender: UIButton) {
-        println("getting user CURRENT location")
         locationSearchBar.text = ""
         busyIndicator.startAnimating()
         self.locationManager.delegate = self
@@ -51,21 +50,18 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     
     // Update function
     override func viewDidLoad() {
-
         super.viewDidLoad()
-        println("updating view did load")
         busyIndicator.stopAnimating()
 
         if productSearchBarText != "default" {
             productSearchBar.text = productSearchBarText
         }
-
+        
         self.productSearchBar.delegate = self
         self.locationSearchBar.delegate = self
         self.resultsTable.delegate = self
         self.resultsTable.dataSource = self
         resultsTable.reloadData()
-        println("done updating view did load")
     }
     
     // Memory warning detector
@@ -77,13 +73,11 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     // Dismiss keyboard when user presses "Search"
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        println("Keyboard Search Button Pressed")
         // run search for current location
-        println("locationSearchBarText: " + locationSearchBarText)
-        println("locationSearchBar.text: " + locationSearchBar.text)
+        // println("locationSearchBarText: " + locationSearchBarText)
+        // println("locationSearchBar.text: " + locationSearchBar.text)
         if (locationSearchBarText != locationSearchBar.text) {
-            println("getting user SPECIFIED location")
-
+            // println("getting user SPECIFIED location")
             busyIndicator.startAnimating()
             self.locationManager.delegate = self
             self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -151,7 +145,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     // Function that is automatically called when a cell is tapped or selected.
     // This is NOT called if the cell is set to segue to another view
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        println("You selected custom cell #: " + String(format: "%i", indexPath.row))
+        // println("You selected custom cell #: " + String(format: "%i", indexPath.row))
         currentProduct = totalListOfProducts[indexPath.row]
     }
 
@@ -326,7 +320,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             
             var responseData: NSArray = NSJSONSerialization.JSONObjectWithData(urlData!, options: NSJSONReadingOptions.MutableContainers, error: &error) as NSArray
             
-            println("parsing products...")
+            // println("parsing products...")
             totalListOfProducts.removeAll(keepCapacity: false)
             
             for var i = 0; i < responseData.count; i++ {
@@ -354,7 +348,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                 
                 var tmpProduct = Product(bID: bID, businessName: bName, category: pCategory, pID: pID, productName: pName, price: pPrice, time: pTime, user: pUser, dist: pDist, ccFlag: pCcFlag, open24Flag: pOpen24Flag, isProduct: true)
                 
-                //* Debug print code
+                /* Debug print code
                 print(i); print(". ")
                 println("Appending product: " + pName)
                 // */
@@ -418,7 +412,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "goto_Details" {
-            println("going to Details")
+            // println("going to Details")
             var i: NSIndexPath = resultsTable.indexPathForSelectedRow()!
             currentProduct = totalListOfProducts[i.row]
             var detailViewReference: Details = segue.destinationViewController as Details

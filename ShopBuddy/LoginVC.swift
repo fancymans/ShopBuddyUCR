@@ -70,7 +70,6 @@ class LoginVC: UIViewController {
                     prefs.setObject(username.text, forKey: "currentUserName")
                     prefs.synchronize()
                     user = User(newUsername: username.text)
-                    println("Created user: " + user.username)
                     self.performSegueWithIdentifier("goto_mainBoard", sender: self)
                 }
                 else {
@@ -100,11 +99,7 @@ class LoginVC: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        println("Sending: " + user.username)
-        
         if segue.identifier == "goto_mainBoard" {
-            println("going to mainboard at index 0")
-            println("Sending: " + user.username)
             var destinationVC: MainBoardVC = segue.destinationViewController as MainBoardVC
             destinationVC.selectedIndex = 0
             destinationVC.setCurrentUser(user)

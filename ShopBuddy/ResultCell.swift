@@ -43,8 +43,10 @@ class ResultCell: UITableViewCell {
         self.productName.text = pName
         self.businessName.text = bName
         self.price.text = "$" + price
-        self.time.text = time
+        self.time.text = "at " + time
         self.user.text = user
         self.distance.text = distance + " mi."
+        
+        self.price.textColor = UIColor(red: 0, green: 0.7, blue: 0, alpha: 1)
     }
 }

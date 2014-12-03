@@ -20,9 +20,14 @@ class MainBoardVC: UITabBarController {
         println("Current Username: " + currentUser.username)
         // Do any additional setup after loading the view.
         if segueIndex == 0 {
+            self.selectedIndex = 1
+            var tmpVC1: SearchVC = self.selectedViewController as SearchVC
+            tmpVC1.currentUserName = currentUser.username
+            
             self.selectedIndex = segueIndex
-            var tmpVC: FeaturedVC = self.selectedViewController as FeaturedVC
-            tmpVC.currentUserName = currentUser.username
+            var tmpVC2: FeaturedVC = self.selectedViewController as FeaturedVC
+            println("Current Username2: " + currentUser.username)
+            tmpVC2.currentUserName = currentUser.username
         }
         if segueIndex == 1 {
             self.selectedIndex = segueIndex
