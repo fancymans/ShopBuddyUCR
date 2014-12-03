@@ -156,29 +156,31 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     }
 
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if countElements(searchText) == 0 {
-            isFiltered = false
-        }
-        else {
-            isFiltered = true
-            filteredListOfProducts.removeAll(keepCapacity: false)
-            // var stringString: String
+        if searchBar == productSearchBar {
+            if countElements(searchText) == 0 {
+                isFiltered = false
+            }
+            else {
+                isFiltered = true
+                filteredListOfProducts.removeAll(keepCapacity: false)
+                // var stringString: String
 
-            for var i = 0; i < totalListOfProducts.count; i++ {
-                var productMatchLC = totalListOfProducts[i].productName.lowercaseString.rangeOfString(searchText)
-                var productMatchUC = totalListOfProducts[i].productName.uppercaseString.rangeOfString(searchText)
-                var productMatchExact = totalListOfProducts[i].productName.rangeOfString(searchText)
-                
-                var businessMatchLC = totalListOfProducts[i].businessName.lowercaseString.rangeOfString(searchText)
-                var businessMatchUC = totalListOfProducts[i].businessName.uppercaseString.rangeOfString(searchText)
-                var businessMatchExact = totalListOfProducts[i].businessName.rangeOfString(searchText)
-                
-                if (productMatchLC != nil) || (productMatchUC != nil) || (productMatchExact != nil) || (businessMatchLC != nil) || (businessMatchUC != nil) || (businessMatchExact != nil) {
-                    filteredListOfProducts.append(totalListOfProducts[i])
+                for var i = 0; i < totalListOfProducts.count; i++ {
+                    var productMatchLC = totalListOfProducts[i].productName.lowercaseString.rangeOfString(searchText)
+                    var productMatchUC = totalListOfProducts[i].productName.uppercaseString.rangeOfString(searchText)
+                    var productMatchExact = totalListOfProducts[i].productName.rangeOfString(searchText)
+                    
+                    var businessMatchLC = totalListOfProducts[i].businessName.lowercaseString.rangeOfString(searchText)
+                    var businessMatchUC = totalListOfProducts[i].businessName.uppercaseString.rangeOfString(searchText)
+                    var businessMatchExact = totalListOfProducts[i].businessName.rangeOfString(searchText)
+                    
+                    if (productMatchLC != nil) || (productMatchUC != nil) || (productMatchExact != nil) || (businessMatchLC != nil) || (businessMatchUC != nil) || (businessMatchExact != nil) {
+                        filteredListOfProducts.append(totalListOfProducts[i])
+                    }
                 }
             }
+            resultsTable.reloadData()
         }
-        resultsTable.reloadData()
     }
     
     func filterContentForSearchText(searchText: String) {
