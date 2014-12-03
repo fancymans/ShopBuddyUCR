@@ -60,10 +60,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             productSearchBar.text = productSearchBarText
         }
 
-        if locationSearchBarText != "default" {
-//            locationSearchBar.text = locationSearchBarText
-        }
-
         self.productSearchBar.delegate = self
         self.locationSearchBar.delegate = self
         self.resultsTable.delegate = self
