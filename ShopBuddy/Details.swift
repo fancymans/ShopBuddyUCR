@@ -13,6 +13,7 @@ class Details: UIViewController, UITextFieldDelegate {
     var previousVC: SearchVC = SearchVC()
     var detailProduct: Product!
     var url: NSURL = NSURL(string: "http://shopbuddyucr.com/SubmitPrice.php")!
+    var currentUserName: String = ""
     
     @IBOutlet var image: UIImageView!
     @IBOutlet var businessName: UILabel!
@@ -70,6 +71,7 @@ class Details: UIViewController, UITextFieldDelegate {
         image.image = UIImage(named: "sampleBusinessPhoto.png")
         productName.text = detailProduct.productName
         businessName.text = detailProduct.businessName
+        user.text = detailProduct.userLastUpdated
         phoneNum.text = tmpBusiness.phoneNum
         address.text = tmpBusiness.address
         productPrice.text = detailProduct.productPrice
@@ -104,7 +106,9 @@ class Details: UIViewController, UITextFieldDelegate {
 
         var prefs: NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
-        var user: NSString = NSString(format: "Darrin")
+        // var user: NSString = NSString(format: "Darrin")
+        var user: NSString = NSString(format: currentUserName)
+        NSLog("\n\n\n\nSending " + user + " to server...")
         println("myID: " + detailProduct.productID)
         var post: NSString = NSString(format: "ID=" + pID + "&Price=" + price + "&User=" + user)
         println(post)

@@ -12,17 +12,20 @@ class MainBoardVC: UITabBarController {
 
     var segueIndex: Int = 0
     var queryRequestText: String = "default"
+    var currentUser: User = User()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        println("Current Username: " + currentUser.username)
         // Do any additional setup after loading the view.
-        if segueIndex != 0 {
+        if segueIndex == 1 {
             self.selectedIndex = segueIndex
             if queryRequestText != "default" {
                 var tmpVC: SearchVC = self.selectedViewController as SearchVC
                 tmpVC.productSearchBar.text = queryRequestText
                 tmpVC.getCurrentLocation();
                 tmpVC.busyIndicator.startAnimating()
+                tmpVC.currentUserName = currentUser.username
             }
         }
     }
@@ -31,7 +34,6 @@ class MainBoardVC: UITabBarController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     /*
     // MARK: - Navigation

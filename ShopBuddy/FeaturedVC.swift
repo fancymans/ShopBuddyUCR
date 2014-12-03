@@ -14,6 +14,7 @@ class FeaturedVC: UIViewController {
     
     var featuredList: [NSString] = ["Gas Stations", "Restaurants", "Department Stores", "Drugstores", "Coffee & Tea", "Bars"]
     var currentFeaturedCellText: String = "default"
+    var currentUserName: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,7 @@ class FeaturedVC: UIViewController {
             var destinationVC: MainBoardVC = segue.destinationViewController as MainBoardVC
             destinationVC.segueIndex = 1;
             destinationVC.queryRequestText = currentFeaturedCellText
+            destinationVC.currentUser = User(newUsername: currentUserName)
         }
     }
     // Get the new view controller using segue.destinationViewController.

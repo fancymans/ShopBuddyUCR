@@ -12,7 +12,7 @@ class WelcomeVC: UIViewController {
     
 //    var instanceOfLogin : LoginVC = LoginVC()
 //    @IBOutlet var usernameLabel: UILabel!
-    var isLoggedIn : Int = 1
+    var isLoggedIn : Int = 0
     var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {

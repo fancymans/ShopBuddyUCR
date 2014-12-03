@@ -19,7 +19,7 @@ class LoginVC: UIViewController {
         super.viewDidLoad()
 
         prefs.setInteger(0, forKey: "isLoggedIn")
-        prefs.setObject("", forKey: "currentUserName")
+        prefs.setObject("guest", forKey: "currentUserName")
         prefs.synchronize()
         // Do any additional setup after loading the view.
     }
@@ -69,8 +69,7 @@ class LoginVC: UIViewController {
                     prefs.setInteger(1, forKey: "isLoggedIn")
                     prefs.setObject(username.text, forKey: "currentUserName")
                     prefs.synchronize()
-                    self.performSegueWithIdentifier(
-                        "goto_mainBoard", sender: self)
+                    self.performSegueWithIdentifier("goto_mainBoard", sender: self)
                 } else {
                     var alert:UIAlertView = UIAlertView()
                     alert.title = "Error"
@@ -90,5 +89,17 @@ class LoginVC: UIViewController {
             }
         }
     }
-
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "goto_mainBoard" {
+            var destinationVC: MainBoardVC = segue.destinationViewController as MainBoardVC
+            destinationVC.currentUser = User(newUsername: username.text)
+        }
+    }
 }
+

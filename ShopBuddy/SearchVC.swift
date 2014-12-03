@@ -29,6 +29,10 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     var isFiltered: Bool = false
     
     
+    
+    var currentUserName: String = "guest"
+    
+    
     // Location manager
     let locationManager = CLLocationManager()
     
@@ -412,6 +416,8 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             var detailViewReference: Details = segue.destinationViewController as Details
             println("You need to fix setCurrentBusiness inside Details.swift")
             detailViewReference.previousVC = self
+            println("SearchVC current username: " + currentUserName)
+            detailViewReference.currentUserName = self.currentUserName
         }
         else if segue.identifier == "goto_Filter" {
             var FilterVCReference: Filter = segue.destinationViewController as Filter
