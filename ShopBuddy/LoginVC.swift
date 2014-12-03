@@ -12,7 +12,7 @@ class LoginVC: UIViewController {
     
     @IBOutlet var username: UITextField!
     @IBOutlet var password: UITextField!
-    
+    var user: User = User()
     var prefs = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
@@ -69,8 +69,11 @@ class LoginVC: UIViewController {
                     prefs.setInteger(1, forKey: "isLoggedIn")
                     prefs.setObject(username.text, forKey: "currentUserName")
                     prefs.synchronize()
+                    user = User(newUsername: username.text)
+                    println("Created user: " + user.username)
                     self.performSegueWithIdentifier("goto_mainBoard", sender: self)
-                } else {
+                }
+                else {
                     var alert:UIAlertView = UIAlertView()
                     alert.title = "Error"
                     alert.message = "Username or password is incorrect."
@@ -96,9 +99,15 @@ class LoginVC: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        println("Sending: " + user.username)
+        
         if segue.identifier == "goto_mainBoard" {
+            println("going to mainboard at index 0")
+            println("Sending: " + user.username)
             var destinationVC: MainBoardVC = segue.destinationViewController as MainBoardVC
-            destinationVC.currentUser = User(newUsername: username.text)
+            destinationVC.selectedIndex = 0
+            destinationVC.setCurrentUser(user)
         }
     }
 }

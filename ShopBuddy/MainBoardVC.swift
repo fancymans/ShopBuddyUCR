@@ -16,8 +16,14 @@ class MainBoardVC: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         println("Current Username: " + currentUser.username)
         // Do any additional setup after loading the view.
+        if segueIndex == 0 {
+            self.selectedIndex = segueIndex
+            var tmpVC: FeaturedVC = self.selectedViewController as FeaturedVC
+            tmpVC.currentUserName = currentUser.username
+        }
         if segueIndex == 1 {
             self.selectedIndex = segueIndex
             if queryRequestText != "default" {
@@ -33,6 +39,12 @@ class MainBoardVC: UITabBarController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func setCurrentUser(newUser: User) {
+        currentUser = newUser
+        println("Set current user to: " + currentUser.username)
+        self.viewDidLoad()
     }
 
     /*

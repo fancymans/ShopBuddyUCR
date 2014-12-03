@@ -414,7 +414,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
             var i: NSIndexPath = resultsTable.indexPathForSelectedRow()!
             currentProduct = totalListOfProducts[i.row]
             var detailViewReference: Details = segue.destinationViewController as Details
-            println("You need to fix setCurrentBusiness inside Details.swift")
             detailViewReference.previousVC = self
             println("SearchVC current username: " + currentUserName)
             detailViewReference.currentUserName = self.currentUserName
