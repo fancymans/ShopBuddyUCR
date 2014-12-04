@@ -37,7 +37,7 @@ class ShortestPathCell: UITableViewCell {
             self.productName.text = productName
             self.Distance.text = productDistance
             self.PhoneNumber.text = businessPhoneNumber
-        self.Order.text = String(format: "%i",number) + "."
+            self.Order.text = String(format: "%i",number) + "."
             self.Address.text = businessAddress
             self.Price.text = pprice
             // If it's not a product, set the business name

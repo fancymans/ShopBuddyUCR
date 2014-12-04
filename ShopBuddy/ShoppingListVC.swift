@@ -14,13 +14,19 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var arrayOfShoppingItems: [NSString] = [NSString] ()
     var queryText: String = ""
-    var routeDistLimit = ["Nigga IDGAF take me to Antarctica", "5 miles","10 miles","25 miles","50 miles"]
+    var routeDistLimit = ["No Limit", "5 miles","10 miles","25 miles","50 miles"]
     
     var requestedLimit = "No Limit"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         distLimitV.hidden = true
+        if(arrayOfShoppingItems.count == 0){
+            RouteButton.enabled = false
+        }
+        else {
+            RouteButton.enabled = true
+        }
         // Do any additional setup after loading the view.
         self.shoppingListTable.delegate = self
         self.shoppingListTable.dataSource = self
@@ -34,6 +40,7 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     
+    @IBOutlet var RouteButton: UIBarButtonItem!
 
     @IBOutlet var distLimitV: UIView!
     
@@ -75,6 +82,9 @@ class ShoppingListVC: UIViewController, UITableViewDataSource, UITableViewDelega
         if editingStyle == UITableViewCellEditingStyle.Delete {
             arrayOfShoppingItems.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+        if(arrayOfShoppingItems.count == 0){
+            RouteButton.enabled = false
         }
 
     }
