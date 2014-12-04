@@ -280,7 +280,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         locationSearchBarText = locationSearchBar.text
 
         queryLocationFromPHP(manager)
-
         self.viewDidLoad()
     }
     // ____________________________________________________________
