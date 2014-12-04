@@ -266,9 +266,6 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     
     // Function to show location info of a placemark
     func displayLocationInfo(placemark: CLPlacemark, manager: CLLocationManager) {
-        // stop updating the location
-        manager.stopUpdatingLocation()
-        
         // Display location info
         println("City: " + placemark.locality)
         println("Zip Code: " + placemark.postalCode)
@@ -295,6 +292,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
         var tfsPost: NSString = NSString(format: "&tfs=" + tfsFilter)
         
         var post: NSString = NSString(format: "lati=" + lati + "&long=" + long + "&sort=" + sortBy + distancePost + ccPost + tfsPost)
+        println(post)
         
         //var distancePost: NSString = NSString(format: "&distance" + distance)
         
