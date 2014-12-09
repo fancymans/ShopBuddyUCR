@@ -31,6 +31,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     
     // Location manager
     let locationManager = CLLocationManager()
+    var searchedPM: CLPlacemark!
     
     // IBOutlets & Actions
     @IBOutlet var productSearchBar: UISearchBar!
@@ -232,6 +233,7 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                 
                 if placemarks.count > 0 {
                     let pm = placemarks[0] as CLPlacemark
+                    self.searchedPM = pm
                     self.displayLocationInfo(pm, manager: manager)
                 }
                 else {
@@ -247,8 +249,8 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
                     let location = CLLocationCoordinate2D( latitude: placemark.location.coordinate.latitude, longitude: placemark.location.coordinate.longitude)
 
                     let pm = placemarks[0] as CLPlacemark
+                    self.searchedPM = pm
                     self.displayLocationInfo(pm, manager: manager)
-
                 }   // end of if
             })      // end of function call
         }
@@ -268,23 +270,25 @@ class SearchVC: UIViewController, CLLocationManagerDelegate, UITableViewDataSour
     func displayLocationInfo(placemark: CLPlacemark, manager: CLLocationManager) {
         // Display location info
         println("City: " + placemark.locality)
-        println("Zip Code: " + placemark.postalCode)
+        // println("Zip Code: " + placemark.postalCode)
         println("State: " + placemark.administrativeArea)
         println("Country: " + placemark.country)
-
+        println("Lati: " + String(format: "%.5f", placemark.location.coordinate.latitude))
+        println("Long: " + String(format: "%.5f", placemark.location.coordinate.longitude))
+        
         // Place location inside the search bar
-        locationSearchBar.text = String(placemark.locality as String + ", " + placemark.postalCode as String)
+        locationSearchBar.text = String(placemark.locality as String + ", " + placemark.administrativeArea as String)
         locationSearchBarText = locationSearchBar.text
-
-        queryLocationFromPHP(manager)
+        
+        queryLocationFromPHP(placemark)
         self.viewDidLoad()
     }
     // ____________________________________________________________
     
-    func queryLocationFromPHP(manager: CLLocationManager) {
+    func queryLocationFromPHP(placemark: CLPlacemark) {
         // Formatting lati and long into NSStrings to send
-        var lati: NSString = NSString(format: "%.10f", manager.location.coordinate.latitude)
-        var long: NSString = NSString(format: "%.10f", manager.location.coordinate.longitude)
+        var lati: NSString = NSString(format: "%.10f", placemark.location.coordinate.latitude)
+        var long: NSString = NSString(format: "%.10f", placemark.location.coordinate.longitude)
         
         var distancePost: NSString = NSString(format: "&distance="  + distance)
         

@@ -31,7 +31,7 @@ class Filter: UIViewController, UIPickerViewDelegate {
     }
     
     @IBAction func backButtonTrigger(sender: AnyObject) {
-        previousVC.queryLocationFromPHP(previousVC.locationManager)
+        previousVC.queryLocationFromPHP(previousVC.searchedPM)
         previousVC.viewDidLoad()
         self.dismissViewControllerAnimated(true, completion: nil)
         

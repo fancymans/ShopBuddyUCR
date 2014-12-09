@@ -125,40 +125,54 @@ class ProductsCatalogVC: UIViewController, UITableViewDataSource, UITableViewDel
 
     func loadCatalog () {
         arrayOfProducts.append(Product(category: "Gas", productName: ""))
-        arrayOfProducts.append(Product(category: "Gas", productName: "Regular Gas"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Gas 87"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Gas 89"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Gas 91"))
+//        arrayOfProducts.append(Product(category: "Gas", productName: "Regular Gas"))
+//        arrayOfProducts.append(Product(category: "Gas", productName: "Gas Diesel"))
+//        arrayOfProducts.append(Product(category: "Gas", productName: "Mid-grade Gas"))
         arrayOfProducts.append(Product(category: "Gas", productName: "Gas Diesel"))
-        arrayOfProducts.append(Product(category: "Gas", productName: "Mid-grade Gas"))
-        arrayOfProducts.append(Product(category: "Gas", productName: "Diesel Gas"))
         
         arrayOfProducts.append(Product(category: "Fruit", productName: ""))
         arrayOfProducts.append(Product(category: "Fruit", productName: "Apple"))
         arrayOfProducts.append(Product(category: "Fruit", productName: "Orange"))
         arrayOfProducts.append(Product(category: "Fruit", productName: "Banana"))
         arrayOfProducts.append(Product(category: "Fruit", productName: "Watermelon"))
+        arrayOfProducts.append(Product(category: "Fruit", productName: "Avocado"))
+        arrayOfProducts.append(Product(category: "Fruit", productName: "Pineapple"))
+        arrayOfProducts.append(Product(category: "Fruit", productName: "Strawberries"))
         
         arrayOfProducts.append(Product(category: "Electronic", productName: ""))
         arrayOfProducts.append(Product(category: "Electronic", productName: "iPhone 6"))
         arrayOfProducts.append(Product(category: "Electronic", productName: "iPad Air 2"))
+        arrayOfProducts.append(Product(category: "Electronic", productName: "Batteries"))
         arrayOfProducts.append(Product(category: "Electronic", productName: "Lightning Cable"))
         arrayOfProducts.append(Product(category: "Electronic", productName: "AirPort Express"))
+        arrayOfProducts.append(Product(category: "Electronic", productName: "PS4"))
+        arrayOfProducts.append(Product(category: "Electronic", productName: "XBox One"))
     
         arrayOfProducts.append(Product(category: "Beverage", productName: ""))
         arrayOfProducts.append(Product(category: "Beverage", productName: "Coca-Cola"))
         arrayOfProducts.append(Product(category: "Beverage", productName: "Bud Light"))
         arrayOfProducts.append(Product(category: "Beverage", productName: "Water"))
         arrayOfProducts.append(Product(category: "Beverage", productName: "Orange Juice"))
+        arrayOfProducts.append(Product(category: "Beverage", productName: "Don Perignon"))
+        arrayOfProducts.append(Product(category: "Beverage", productName: "Red Wine"))
+        arrayOfProducts.append(Product(category: "Beverage", productName: "White Wine"))
 
         arrayOfProducts.append(Product(category: "Cleaning", productName: ""))
         arrayOfProducts.append(Product(category: "Cleaning", productName: "Windex"))
         arrayOfProducts.append(Product(category: "Cleaning", productName: "Clorex"))
+        arrayOfProducts.append(Product(category: "Cleaning", productName: "Swiffer"))
+        arrayOfProducts.append(Product(category: "Cleaning", productName: "Lysol"))
 
         arrayOfProducts.append(Product(category: "Cloth", productName: ""))
         arrayOfProducts.append(Product(category: "Cloth", productName: "T-Shirt"))
         arrayOfProducts.append(Product(category: "Cloth", productName: "Pants"))
         arrayOfProducts.append(Product(category: "Cloth", productName: "Swimsuit"))
+        arrayOfProducts.append(Product(category: "Cloth", productName: "Shoes"))
+        arrayOfProducts.append(Product(category: "Cloth", productName: "Belts"))
+
     }
     
     func filterContentForSearchText(searchText: String) {
