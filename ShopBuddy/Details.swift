@@ -57,7 +57,11 @@ class Details: UIViewController, UITextFieldDelegate {
         self.productPrice.delegate = self
         
         self.setLabels()
-//        self.navigationController?.navigationBarHidden = false;
+        
+        var expectedSize: CGSize = address.sizeThatFits(CGSize(width: 273, height: 800))
+        
+        address.frame = CGRect(x: address.frame.minX, y: address.frame.minY, width: expectedSize.width, height: expectedSize.height)
+        address.lineBreakMode = NSLineBreakMode.ByWordWrapping
     }
 
     override func didReceiveMemoryWarning() {
